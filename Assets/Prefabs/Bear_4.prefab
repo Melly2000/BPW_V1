@@ -1477,8 +1477,6 @@ GameObject:
   - component: {fileID: 310935384301626156}
   - component: {fileID: 4811349353153827570}
   - component: {fileID: 8805047988316939497}
-  - component: {fileID: 7003134546459357947}
-  - component: {fileID: 2322073964435013320}
   m_Layer: 7
   m_Name: Bear_4
   m_TagString: Enemy
@@ -1546,7 +1544,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -1572,40 +1570,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.1715772, y: 1.8815341, z: 1.94616}
   m_Center: {x: 0.08578756, y: 0.75687146, z: -0.14553052}
---- !u!114 &7003134546459357947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7096560717655764966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ea85f38ae3a11d4f9fca9c92420ab64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerCombatScript: {fileID: 0}
-  player: {fileID: 0}
-  energySystem: {fileID: 0}
-  energySlider: {fileID: 0}
-  useEnergy: 10
-  maxEnergy: 50
-  currentEnergy: 0
---- !u!114 &2322073964435013320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7096560717655764966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f38d2ab4696b74440afda1c2e70104dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  target: {fileID: 0}
-  attackDistance: 0
 --- !u!1 &7221484084925690046
 GameObject:
   m_ObjectHideFlags: 0
