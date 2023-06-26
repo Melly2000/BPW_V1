@@ -9,49 +9,44 @@ public class TutorialManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        popUpIndex = 0;
+        popUps[popUpIndex].SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < popUps.Length; i++)
-        {
-            if (i == popUpIndex)
-            {
-                popUps[popUpIndex].SetActive(true);
-            }
-            else
-            {
-                popUps[popUpIndex].SetActive(false);
-            }
+        Debug.Log(popUpIndex);
+        if (popUpIndex != 0) {
+            popUps[popUpIndex - 1].SetActive(true);
         }
+        popUps[popUpIndex].SetActive(true);
         if (popUpIndex == 0)
         {
             if (Input.GetKeyDown("d") || Input.GetKeyDown("a") || Input.GetKeyDown("w") || Input.GetKeyDown("s"))
             {
                 popUpIndex++;
             }
-            else if (popUpIndex == 1)
+        }
+        else if (popUpIndex == 1)
+        {
+            if (Input.GetKeyDown("space"))
             {
-                if (Input.GetKeyDown("space"))
-                {
-                    popUpIndex++;
-                }
+                popUpIndex++;
             }
-            else if (popUpIndex == 2)
+        }
+        else if (popUpIndex == 2)
+        {
+            if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
             {
-                if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
-                {
-                    popUpIndex++;
-                }
+                popUpIndex++;
             }
-            else if (popUpIndex == 3)
+        }
+        else if (popUpIndex == 3)
+        {
+            if(Input.GetKeyUp("w"))
             {
-                if(Input.GetKeyUp("w"))
-                {
-                    popUpIndex++;
-                }
+                popUpIndex++;
             }
         }
 

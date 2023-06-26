@@ -24,10 +24,12 @@ public class Spawner : MonoBehaviour
             GameObject enemy = Instantiate(bear, gameObject.transform.position, Quaternion.identity);
             enemy.SendMessage("setEnergy", 50);
             enemy.SendMessage("setPlayer", GameObject.FindWithTag("Player"));
+            energySystem.SetMaxHealth(enemyBar, 50);
             enemy.SendMessage("setEnergySystem", energySystem);
             enemy.SendMessage("setEnergyBar", enemyBar);
             enemy.AddComponent<EnemyMovement>();
             enemy.AddComponent<EnemyCombat>();
+
             enemyCount++;
         }
     }
