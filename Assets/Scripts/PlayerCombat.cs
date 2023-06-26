@@ -35,6 +35,7 @@ public class PlayerCombat : MonoBehaviour
         mouseMovementScript = GetComponent<MouseMovement>();
         enemyCombatScript = enemy.GetComponent<EnemyCombat>();
         currentEnergy = maxEnergy;
+        useEnergy = 10;
         energySystem.SetMaxHealth(energySlider, maxEnergy);
     }
 
@@ -45,8 +46,8 @@ public class PlayerCombat : MonoBehaviour
         if (Input.GetKey("space"))
         {
             playerMovementScript.enabled = false;
-                Debug.Log(transform.right);
-                Debug.Log(transform.position);
+                // Debug.Log(transform.right);
+                // Debug.Log(transform.position);
             if (Input.GetKeyUp("w") && !isAttacking)
             {
                 Debug.Log("Launch attack!");
@@ -57,6 +58,9 @@ public class PlayerCombat : MonoBehaviour
                 currentEnergy = currentEnergy - useEnergy;
                 energySystem.SetEnergy(energySlider, currentEnergy);
                 mouseMovementScript.enabled = false;
+
+                Debug.Log("current: "+ currentEnergy);
+                Debug.Log("use: "+ useEnergy);
             }
         }
         else
@@ -67,7 +71,6 @@ public class PlayerCombat : MonoBehaviour
         {
             isDead = true;
             gameManager.GameOver();
-            //Debug.Log("Enemy WINS!");
         }
 
     }
@@ -75,6 +78,10 @@ public class PlayerCombat : MonoBehaviour
     {
         MAXIMUM_ENERGY_TO_USE = Mathf.FloorToInt(currentEnergy * 0.8f);
         MINIMUM_ENERGY_TO_USE = 10;
+        if (currentEnergy < MINIMUM_ENERGY_TO_USE) {
+            MINIMUM_ENERGY_TO_USE = currentEnergy;
+        }
+
 
         if (Input.GetMouseButtonDown(1) && !isAttacking)
         {

@@ -8,7 +8,8 @@ public class EnemyMovement : MonoBehaviour
     Rigidbody rb;
     [SerializeField] Transform target;
     Vector3 moveDir;
-
+    [SerializeField] float attackDistance;
+    float distanceMoved = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -21,17 +22,32 @@ public class EnemyMovement : MonoBehaviour
     {
         if (target)
         {
-            Vector3 dir = (target.position - transform.position).normalized;
-            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.AngleAxis(angle, Vector3.down);
-            moveDir = dir;
+            Vector3 dir = (target.position - transform.position);
+
+            bool isInAttackRange = dir.magnitude <= attackDistance;
+            if (isInAttackRange) {
+                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
+                moveDir = dir;
+            } else {
+                // Change direction after walking some distance
+                if (distanceMoved >= 30) {
+                    float angle = Random.Range(-180, 180);
+                    transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
+                    distanceMoved = 0;
+                }
+                moveDir = transform.forward;
+            }
+
         }
     }
     void FixedUpdate()
     {
         if (target)
         {
-            rb.AddForce(moveDir * moveSpeed * 10f, ForceMode.Force);
+            float actualMoveSpeed = moveSpeed * .4f;
+            distanceMoved += actualMoveSpeed;
+            rb.AddForce(moveDir * actualMoveSpeed, ForceMode.Force);
         }
     }
 }

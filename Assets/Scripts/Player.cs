@@ -20,25 +20,12 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // // Mouse to rotation
-        // Vector3 dir = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
-        // float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        // transform.rotation = Quaternion.AngleAxis(angle, Vector3.down);
-
-        //Debug.Log(dir);
-
         // Rotation to movement direction
         float horizontal = -1 * Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
         moveDirection = transform.forward * horizontal + transform.right * vertical;
-        rb.AddForce(moveDirection.normalized * 5f, ForceMode.Force);
-        // if (mouseClicked) {
-        //     energyCounter++;
-        // }
-        // if (mouseReleased) {
-        //     Debug.Log("Zo'n grote vuurbal jonguh");
-        // }
+        rb.AddForce(moveDirection.normalized * 5 * .5f, ForceMode.Force);
     }
 
     void FixedUpdate()

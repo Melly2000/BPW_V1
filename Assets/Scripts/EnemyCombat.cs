@@ -20,6 +20,21 @@ public class EnemyCombat : MonoBehaviour
         energySystem.SetMaxHealth(energySlider, maxEnergy);
     }
 
+    public void setEnergy(int energy) {
+        currentEnergy = maxEnergy = energy;
+    }
+
+    public void setPlayer(GameObject p) {
+        player = p;
+    }
+    public void setEnergySystem(EnergyBar bar) {
+        energySystem = bar;
+    }
+
+    public void setEnergyBar(Slider bar) {
+        energySlider = bar;
+    }
+
     // Update is called once per frame
     void Update()
     {
