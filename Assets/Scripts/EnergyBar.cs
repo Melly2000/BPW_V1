@@ -8,7 +8,7 @@ public class EnergyBar : MonoBehaviour
     public Slider playerSlider;
 
     public Slider playerUseSlider;
-    public Slider EnemySlider;
+    public List<Slider> EnemySlider;
 
     public void SetMaxHealth(Slider target, int energy)
     {
@@ -24,6 +24,11 @@ public class EnergyBar : MonoBehaviour
     {
         currentEnergy -= damage;
         SetEnergy(targetSlider, currentEnergy);
+    }
+
+    public void SetSlider(Slider targetSlider, bool isDestroyed)
+    {
+        targetSlider.enabled = false;
     }
 
 }

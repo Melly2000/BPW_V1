@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class PlayerCombat : MonoBehaviour
 {
+    Pickup pickupScript;
     public GameManager gameManager;
     [SerializeField] float distance = 500;
     public EnemyCombat enemyCombatScript;
@@ -24,12 +26,13 @@ public class PlayerCombat : MonoBehaviour
     private Vector3 targetPosition, currentPosition;
     float timeElapsed;
     float lerpDuration = 2;
-    private bool isDead;
-
+    public bool isDead;
+    int energyPickupCount = 1;
     SphereCollider colliderPlayer;
-    // Start is called before the first frame update
+    
     void Start()
     {
+        pickupScript = GetComponent<Pickup>();
         colliderPlayer = GetComponent<SphereCollider>();
         playerMovementScript = GetComponent<Player>();
         mouseMovementScript = GetComponent<MouseMovement>();
@@ -39,28 +42,28 @@ public class PlayerCombat : MonoBehaviour
         energySystem.SetMaxHealth(energySlider, maxEnergy);
     }
 
-    // Update is called once per frame
     void Update()
     {
-
+        if (pickupScript.NumberOfPickups == energyPickupCount)
+        {
+            energyPickupCount++;
+            energySystem.SetMaxHealth(energySlider, maxEnergy);
+        }
         if (Input.GetKey("space"))
         {
             playerMovementScript.enabled = false;
-                // Debug.Log(transform.right);
-                // Debug.Log(transform.position);
             if (Input.GetKeyUp("w") && !isAttacking)
             {
                 Debug.Log("Launch attack!");
                 isAttacking = true;
-                // float actualDistance = distance = useEnergy; // Use energy to determine how far we go
                 targetPosition = transform.position + transform.right * distance;
                 currentPosition = transform.position;
                 currentEnergy = currentEnergy - useEnergy;
                 energySystem.SetEnergy(energySlider, currentEnergy);
                 mouseMovementScript.enabled = false;
 
-                Debug.Log("current: "+ currentEnergy);
-                Debug.Log("use: "+ useEnergy);
+                Debug.Log("current: " + currentEnergy);
+                Debug.Log("use: " + useEnergy);
             }
         }
         else
@@ -73,16 +76,21 @@ public class PlayerCombat : MonoBehaviour
             gameManager.GameOver();
         }
 
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        bool allEnemiesDead = enemies.All(enemy => enemy.GetComponent<EnemyCombat>().isDead);
+        if (allEnemiesDead)
+        {
+            Debug.Log("Player WINS!");
+        }
     }
     private void FixedUpdate()
     {
         MAXIMUM_ENERGY_TO_USE = Mathf.FloorToInt(currentEnergy * 0.8f);
         MINIMUM_ENERGY_TO_USE = 10;
-        if (currentEnergy < MINIMUM_ENERGY_TO_USE) {
+        if (currentEnergy < MINIMUM_ENERGY_TO_USE)
+        {
             MINIMUM_ENERGY_TO_USE = currentEnergy;
         }
-
-
         if (Input.GetMouseButtonDown(1) && !isAttacking)
         {
             useEnergy = useEnergy - 1;
@@ -91,7 +99,7 @@ public class PlayerCombat : MonoBehaviour
         {
             useEnergy = useEnergy + 1;
         }
-        
+
         float clamped = Mathf.Clamp(useEnergy, MINIMUM_ENERGY_TO_USE, MAXIMUM_ENERGY_TO_USE);
         useEnergy = Mathf.FloorToInt(clamped);
         energySystem.SetEnergy(UseEnergySlider, useEnergy);
@@ -113,62 +121,27 @@ public class PlayerCombat : MonoBehaviour
             }
         }
     }
-
     void OnTriggerEnter(Collider other)
     {
         Debug.Log("TRIGGERED!");
-        // TODO: Check if collision is with enemy
 
         if (isAttacking && other.CompareTag("Enemy"))
         {
-            // Debug.Log("HIT!");
-            enemyCombatScript.TakeDamage(useEnergy);
-            // Set energy back to useEnergy + 10
+            var enemy = other.GetComponent<EnemyCombat>();
+            enemy.TakeDamage(useEnergy);
+
+            // enemyCombatScript.TakeDamage(useEnergy);
             currentEnergy += useEnergy + 10;
         }
-
-    }
-    // void OnCollisionEnter(Collision other)
-    // {
-    //     Debug.Log("TRIGGERED!");
-    //     // TODO: Check if collision is with enemy
-
-    //     if (isAttacking && CompareTag("Enemy"))
-    //     {
-    //         Debug.Log("HIT!");
-    //         // Set energy back to useEnergy + 10
-    //         currentEnergy += useEnergy + 10;
-    //     }
-    //     // else
-    //     // {
-    //     //     currentEnergy -= useEnergy;
-    //     // }
-    // }
-
-
-
-    void UseEnergy()
-    {
-
-    }
-    void LaunchAttack(Vector3 direction)
-    {
-        // Vector3 targetPosition;
-        // targetPosition = new Vector3(direction.x + distance, transform.position.y, direction.y + distance);
-        // huidige positie in richting transform.rotation + distance
-        // transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
-
-        // Debug.Log("distance " + distance);
-        var targetPosition = transform.right.normalized * 100 * distance;
-        transform.position = Vector3.Lerp(transform.position, targetPosition, step);
-        // Debug.Log(targetPosition);
-        // Debug.Log(transform.position);
     }
     public void TakeDamage(int damage)
     {
         currentEnergy -= damage;
         energySystem.SetEnergy(energySlider, currentEnergy);
     }
-
-
+    public void GetEnergy(int energyAmount)
+    {
+        currentEnergy += energyAmount;
+        energySystem.SetEnergy(energySlider, currentEnergy);
+    }
 }

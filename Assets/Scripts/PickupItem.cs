@@ -1,17 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PickupItem : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    public int energyAmountStored;
+    public bool pickableObject;
+    private void OnTriggerStay(Collider other)
     {
-        Pickup pickup = other.GetComponent<Pickup>();
-
-        if (pickup != null)
+        if (other.CompareTag("Player"))
         {
-            pickup.PickupCollected();
-            gameObject.SetActive(false);
+            Debug.Log("pickable");
+            pickableObject = true;
+            Pickup pickup = other.GetComponent<Pickup>();
+
+            if (pickup != null && Input.GetKey("e"))
+            {
+                Debug.Log("pickup");
+                pickup.PickupCollected();
+                gameObject.SetActive(false);
+            }
         }
+    }
+    void OnTriggerExit(Collider other)
+    {
+        pickableObject = false;
     }
 }

@@ -11,13 +11,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject restartButton;
     [SerializeField] GameObject resumeButton;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown("escape") && !isPaused)

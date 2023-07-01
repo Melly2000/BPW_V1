@@ -1,23 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TutorialManager : MonoBehaviour
 {
     public GameObject[] popUps;
     private int popUpIndex;
-    // Start is called before the first frame update
+    private Quaternion savedRotation;
+    [SerializeField] GameObject pickup;
+    [SerializeField] GameObject enemy;
+    private bool isActive;
+    private PickupItem pickupScript;
+    public GameObject player;
+
+
+
     void Start()
     {
         popUpIndex = 0;
         popUps[popUpIndex].SetActive(true);
+        savedRotation = player.transform.rotation;
+        pickupScript = pickup.GetComponent<PickupItem>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         Debug.Log(popUpIndex);
-        if (popUpIndex != 0) {
+        if (popUpIndex != 0)
+        {
             popUps[popUpIndex - 1].SetActive(true);
         }
         popUps[popUpIndex].SetActive(true);
@@ -30,7 +41,8 @@ public class TutorialManager : MonoBehaviour
         }
         else if (popUpIndex == 1)
         {
-            if (Input.GetKeyDown("space"))
+            bool hasRotated = player.transform.rotation != savedRotation;
+            if (hasRotated)
             {
                 popUpIndex++;
             }
@@ -44,9 +56,29 @@ public class TutorialManager : MonoBehaviour
         }
         else if (popUpIndex == 3)
         {
-            if(Input.GetKeyUp("w"))
+            bool space = Input.GetKey("space");
+            bool w = Input.GetKey("w");
+            if (space && w)
             {
                 popUpIndex++;
+            }
+        }
+        else if (popUpIndex == 4 && pickupScript.pickableObject)
+        {
+            if (Input.GetKey("e"))
+            {
+                Debug.Log("Pick up collected");
+                isActive = true;
+                enemy.SetActive(true);
+                popUpIndex++;
+            }
+        }
+        else if (popUpIndex == 5)
+        {
+            if (!isActive)
+            {
+                Debug.Log("You beat the tutorial!");
+                // next scene
             }
         }
 
